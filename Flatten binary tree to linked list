@@ -1,0 +1,63 @@
+How It Works:
+Iterative Traversal:
+Start from the root.
+While the current node (root) is not NULL:
+No Left Child: If root has no left child, move to the right child.
+With Left Child:
+Find the rightmost node (curr) in the left subtree.
+Connect the original right subtree to curr->right.
+Move the left subtree to the right (root->right = root->left).
+Set root->left to NULL.
+Move to the right child.
+Time and Space Complexity:
+Time Complexity: O(N)
+Each node is visited at most twice (once to find the rightmost node and once to flatten).
+Space Complexity: O(1)
+The operation is done in-place without using additional memory.
+
+
+Code Snippet:
+void flatten(Node *root)
+{
+    while(root){
+        if(!root->left) {
+            root = root->right;
+        }
+        else{
+            Node* curr = root->left;
+            while(curr->right){
+                curr = curr->right;
+            }
+            curr->right = root->right;
+            root->right = root->left;
+            root->left = NULL;
+            root = root->right;
+        }
+    }
+}
+
+
+Example:
+Given the following binary tree:
+
+
+    1
+   / \
+  2   5
+ / \   \
+3   4   6
+After calling flatten(root), the tree becomes:
+
+
+1
+ \
+ 2
+  \
+   3
+    \
+     4
+      \
+       5
+        \
+         6
+This function efficiently flattens the tree in linear time with constant space, making it optimal for scenarios where memory usage is a constraint.
