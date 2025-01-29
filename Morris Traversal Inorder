@@ -1,0 +1,57 @@
+The provided inOrder function performs an in-order traversal of a binary tree without using recursion or an explicit stack. Instead, it employs the Morris Traversal algorithm, which modifies the tree's structure temporarily to achieve O(1) space complexity. 
+The function returns a vector containing the values of the nodes in in-order sequence.
+
+How It Works:
+Initialization:
+An empty vector ans is created to store the in-order traversal result.
+The traversal starts from the root node.
+Traversal Loop:
+The algorithm iterates while the current root is not NULL.
+Case 1: No Left Child
+If the current root node does not have a left child:
+Visit the node: Add root->data to the ans vector.
+Move to Right: Update root to its right child (root = root->right).
+Case 2: Node with Left Child
+If the current root node has a left child:
+Find Predecessor: Locate the rightmost node (curr) in the left subtree of root. This node is the in-order predecessor of root.
+Thread Creation:
+If curr->right is NULL, set curr->right to point back to root (creating a temporary thread) and move root to its left child.
+Thread Removal & Visit:
+If curr->right already points to root, it means the left subtree has been fully traversed. Remove the temporary thread (curr->right = NULL), add root->data to ans, and move root to its right child.
+Completion:
+The loop continues until all nodes are visited.
+Finally, the ans vector containing the in-order traversal is returned.
+Example Usage:
+Suppose you have the following binary tree:
+
+TC: O(n)
+SC: O(1)
+
+//CODE
+vector<int> inOrder(Node* root)
+{
+    vector<int> ans;
+    while(root){
+        if(!root->left){
+            ans.push_back(root->data);
+            root = root->right;
+        }
+        else{
+            Node* curr = root->left;
+            while(curr->right && curr->right != root){
+                curr = curr->right;
+            }
+            if(!curr->right){
+                curr->right = root;
+                root = root->left;
+            }
+            else{
+                ans.push_back(root->data);
+                curr->right = NULL;
+                root = root->right;
+            }
+        }
+    }
+    return ans;
+}
+This function effectively traverses the binary tree in in-order without using additional memory for recursion or stack, making it an efficient solution for certain applications.
